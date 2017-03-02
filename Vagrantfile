@@ -9,8 +9,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Copy local SSH key
   config.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "~/.ssh/me.pub"
+  # Enable X forwarding through SSH
+  config.ssh.forward_x11 = true
   # Provision VM. Use regular user, not root (passwordless sudo is available)
   config.vm.provision "shell", path: "bootstrap.sh", privileged: false
+  # Enable X forwarding through SSH
    
    config.vm.provider :virtualbox do |vb|
     vb.customize ["modifyvm", :id, "--memory", "4096"]
