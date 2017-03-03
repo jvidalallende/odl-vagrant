@@ -7,13 +7,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box_url = "https://atlas.hashicorp.com/ubuntu/boxes/xenial64"
   config.vm.box = "ubuntu/xenial64"
 
-  # Copy local SSH key
-  config.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "~/.ssh/me.pub"
   # Enable X forwarding through SSH
   config.ssh.forward_x11 = true
+
+  # Copy local SSH key
+  config.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "~/.ssh/id_rsa.pub"
+  config.vm.provision "file", source: "~/.ssh/id_rsa", destination: "~/.ssh/id_rsa"
+
   # Provision VM. Use regular user, not root (passwordless sudo is available)
   config.vm.provision "shell", path: "bootstrap.sh", privileged: false
-  # Enable X forwarding through SSH
    
    config.vm.provider :virtualbox do |vb|
     vb.customize ["modifyvm", :id, "--memory", "4096"]
