@@ -7,6 +7,33 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box_url = "https://atlas.hashicorp.com/ubuntu/boxes/xenial64"
   config.vm.box = "ubuntu/xenial64"
 
+  config.vm.provider :virtualbox do |vb|
+    vb.name = "ODL-Vagrant"
+    vb.customize ["modifyvm", :id, "--memory", "4096"]
+
+    # This is needed to resize the disk (by default just 10G) to 50G
+    # Note that this may not be the correct file name, it is tied to current
+    # version of the box
+    vb.customize [
+      "clonehd", "#{ENV["HOME"]}/VirtualBox VMs/#{vb.name}/ubuntu-xenial-16.04-cloudimg.vmdk",
+                 "#{ENV["HOME"]}/VirtualBox VMs/#{vb.name}/ubuntu-xenial-16.04-cloudimg.vdi",
+      "--format", "VDI"
+    ]
+    vb.customize [
+      "modifyhd", "#{ENV["HOME"]}/VirtualBox VMs/#{vb.name}/ubuntu-xenial-16.04-cloudimg.vdi",
+      "--resize", 50 * 1024
+    ]
+    vb.customize [
+      "storageattach", :id,
+      "--storagectl", "SCSI Controller",
+      "--port", "0",
+      "--device", "0",
+      "--type", "hdd",
+      "--nonrotational", "on",
+      "--medium", "#{ENV["HOME"]}/VirtualBox VMs/#{vb.name}/ubuntu-xenial-16.04-cloudimg.vdi"
+    ]
+  end
+
   # Enable X forwarding through SSH
   config.ssh.forward_x11 = true
 
@@ -15,10 +42,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "file", source: "~/.ssh/id_rsa", destination: "~/.ssh/id_rsa"
 
   # Provision VM. Use regular user, not root (passwordless sudo is available)
-  config.vm.provision "shell", path: "bootstrap.sh", privileged: false
-   
-   config.vm.provider :virtualbox do |vb|
-    vb.customize ["modifyvm", :id, "--memory", "4096"]
-  end
+  #config.vm.provision "shell", path: "bootstrap.sh", privileged: false
 
 end
