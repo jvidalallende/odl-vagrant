@@ -42,6 +42,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "file", source: "~/.ssh/id_rsa", destination: "~/.ssh/id_rsa"
 
   # Provision VM. Use regular user, not root (passwordless sudo is available)
-  #config.vm.provision "shell", path: "bootstrap.sh", privileged: false
+  config.vm.provision "shell", path: "bootstrap.sh", privileged: false
 
 end
