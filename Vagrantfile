@@ -15,7 +15,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # Note that this may not be the correct file name, it is tied to current
     # version of the box
     # Only do it the first time
-    unless File.directory?("#{ENV["HOME"]}/VirtualBox VMs/#{vb.name}")
+    unless File.directory? "#{ENV["HOME"]}/VirtualBox VMs/#{vb.name}"
       vb.customize [
         "clonehd", "#{ENV["HOME"]}/VirtualBox VMs/#{vb.name}/ubuntu-xenial-16.04-cloudimg.vmdk",
                    "#{ENV["HOME"]}/VirtualBox VMs/#{vb.name}/ubuntu-xenial-16.04-cloudimg.vdi",
@@ -34,6 +34,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         "--nonrotational", "on",
         "--medium", "#{ENV["HOME"]}/VirtualBox VMs/#{vb.name}/ubuntu-xenial-16.04-cloudimg.vdi"
       ]
+      if File.exists? "#{ENV["HOME"]}/VirtualBox VMs/#{vb.name}/ubuntu-xenial-16.04-cloudimg.vmdk"
+        File.delete "#{ENV["HOME"]}/VirtualBox VMs/#{vb.name}/ubuntu-xenial-16.04-cloudimg.vmdk"
+      end
     end
   end
 
