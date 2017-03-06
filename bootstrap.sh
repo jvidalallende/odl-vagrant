@@ -5,11 +5,17 @@ ODL_USERNAME=JuanVidal
 
 echo "Installing dependencies..."
 sudo apt-get update -y
-sudo apt-get install -y git openjdk-8-jdk-headless maven tmux git-review
+sudo apt-get install -y \
+    git\
+    openjdk-8-jdk-headless\
+    maven\
+    tmux\
+    git-review \
+    openvswitch-switch
 
 echo "Configuring environment variables..."
 echo "export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64" >> ~/.bash_profile
-echo "export MAVEN_OPTS='-Xmx1024m'" >> ~/.bash_profile
+echo "export MAVEN_OPTS='-Xmx2048m'" >> ~/.bash_profile
 
 echo "Retrieving Opendaylight's Maven settings.xml..."
 mkdir -p ~/.m2/
@@ -48,7 +54,8 @@ git config user.email "nsh_patcher@ovs_user.com"
 git config user.name "nsh_patcher"
 git am *.patch
 ./boot.sh
-./configure --with-linux=/lib/modules/`uname -r`/build
-sudo make modules_install
+./configure --prefix=/usr --with-linux=/lib/modules/`uname -r`/build
+sudo make -j3 modules_install
 sudo make install
+sudo systemctl restart openvswitch-switch
 cd ~
