@@ -14,24 +14,27 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # This is needed to resize the disk (by default just 10G) to 50G
     # Note that this may not be the correct file name, it is tied to current
     # version of the box
-    vb.customize [
-      "clonehd", "#{ENV["HOME"]}/VirtualBox VMs/#{vb.name}/ubuntu-xenial-16.04-cloudimg.vmdk",
-                 "#{ENV["HOME"]}/VirtualBox VMs/#{vb.name}/ubuntu-xenial-16.04-cloudimg.vdi",
-      "--format", "VDI"
-    ]
-    vb.customize [
-      "modifyhd", "#{ENV["HOME"]}/VirtualBox VMs/#{vb.name}/ubuntu-xenial-16.04-cloudimg.vdi",
-      "--resize", 50 * 1024
-    ]
-    vb.customize [
-      "storageattach", :id,
-      "--storagectl", "SCSI Controller",
-      "--port", "0",
-      "--device", "0",
-      "--type", "hdd",
-      "--nonrotational", "on",
-      "--medium", "#{ENV["HOME"]}/VirtualBox VMs/#{vb.name}/ubuntu-xenial-16.04-cloudimg.vdi"
-    ]
+    # Only do it the first time
+    unless File.directory?("#{ENV["HOME"]}/VirtualBox VMs/#{vb.name}")
+      vb.customize [
+        "clonehd", "#{ENV["HOME"]}/VirtualBox VMs/#{vb.name}/ubuntu-xenial-16.04-cloudimg.vmdk",
+                   "#{ENV["HOME"]}/VirtualBox VMs/#{vb.name}/ubuntu-xenial-16.04-cloudimg.vdi",
+        "--format", "VDI"
+      ]
+      vb.customize [
+        "modifyhd", "#{ENV["HOME"]}/VirtualBox VMs/#{vb.name}/ubuntu-xenial-16.04-cloudimg.vdi",
+        "--resize", 50 * 1024
+      ]
+      vb.customize [
+        "storageattach", :id,
+        "--storagectl", "SCSI Controller",
+        "--port", "0",
+        "--device", "0",
+        "--type", "hdd",
+        "--nonrotational", "on",
+        "--medium", "#{ENV["HOME"]}/VirtualBox VMs/#{vb.name}/ubuntu-xenial-16.04-cloudimg.vdi"
+      ]
+    end
   end
 
   # Enable X forwarding through SSH
