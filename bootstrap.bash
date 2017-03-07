@@ -50,18 +50,6 @@ function retrieve_odl_maven_settings {
     wget -q -O - ${settings_url} > ~/.m2/settings.xml
 }
 
-function configure_development_tools {
-    mkdir ~/GIT
-    git clone https://github.com/jvidalallende/config-files.git ~/GIT/config-files
-    git clone https://github.com/drmad/tmux-git ~/GIT/tmux-git
-    ln -s ~/GIT/config-files/vimrc ~/.vimrc
-    ln -s ~/GIT/config-files/vim ~/.vim
-    ln -s ~/GIT/config-files/tmux.conf ~/.tmux.conf
-    ln -s ~/GIT/config-files/bash_aliases ~/.bash_aliases
-    echo '. ~/GIT/config-files/bashrc' >> ~/.bashrc
-    echo '. ~/.bashrc' >> ~/.bash_profile
-}
-
 function get_odl_repositories {
     git clone https://github.com/opendaylight/sfc.git ~/odl-sfc
     git clone https://github.com/opendaylight/netvirt.git ~/odl-netvirt
@@ -124,8 +112,6 @@ echo "Configuring environment variables..."
 configure_java_env
 echo "Retrieving Opendaylight's Maven settings.xml..."
 retrieve_odl_maven_settings
-echo "Configuring jvidalallende's environment..."
-configure_development_tools
 echo "Cloning SFC and NetVirt repositories..."
 get_odl_repositories
 echo "Installing git hooks..."
