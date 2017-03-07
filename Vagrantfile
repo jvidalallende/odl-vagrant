@@ -50,4 +50,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Provision VM. Use regular user, not root (passwordless sudo is available)
   config.vm.provision "shell", path: "bootstrap.bash", privileged: false
 
+  # Use jvidalallende/config-files to configure the environment
+  config.vm.provision "shell", path: "apply-config.bash", privileged: false
+
 end
