@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Setup your username for OpenDaylight's gerrit
-ODL_USERNAME=JuanVidal
+ODL_USERNAME="ODL_USERNAME"
 
 # Distribution name, as stored in opendaylight nexus
 DISTRIBUTION_NAME="distribution-karaf-0.6.0-20170228.032733-4093.tar.gz"
