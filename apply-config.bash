@@ -6,6 +6,8 @@ function configure_development_tools {
     ln -s ~/GIT/config-files/vim ~/.vim
     ln -s ~/GIT/config-files/tmux.conf ~/.tmux.conf
     ln -s ~/GIT/config-files/bash_aliases ~/.bash_aliases
+    ln -s ~/GIT/config-files/gitconfig ~/.gitconfig
+    ln -s ~/GIT/config-files/gitignore_global ~/.gitignore_global
     echo '. ~/GIT/config-files/bashrc' >> ~/.bashrc
     echo '. ~/.bashrc' >> ~/.bash_profile
 }
