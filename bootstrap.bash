@@ -4,7 +4,7 @@
 ODL_USERNAME="juanvidal"
 
 # Distribution name, as stored in opendaylight nexus
-DISTRIBUTION_NAME="distribution-karaf-0.6.0-20170228.032733-4093.tar.gz"
+DISTRIBUTION_NAME="distribution-karaf-0.6.0-*.tar.gz"
 
 # This global variable stores the PID for the download of ODL distribution
 # It is ugly to use global variables, but using local ones and waiting for
@@ -14,8 +14,16 @@ WAIT_PID=0
 
 function get_odl_distribution_in_background {
     local snapshot_url="https://nexus.opendaylight.org/content/repositories/opendaylight.snapshot"
-    local distribution_path="org/opendaylight/integration/distribution-karaf/0.6.0-SNAPSHOT"
-    wget -o /tmp/wget-log -q ${snapshot_url}/${distribution_path}/${DISTRIBUTION_NAME} &
+    local distribution_path="org/opendaylight/integration/distribution-karaf/0.6.0-SNAPSHOT/"
+    local url=${snapshot_url}/${distribution_path}
+
+    # This command does the following:
+    # 1) retrieve the directory listing of snapshots (curl)
+    # 2) get the distribution gzipped tarballs only, skipping checkum files (grep 'tar.gz' | grep -vE '(md5|sha1)'
+    # 3) from the latest one, extract the URL, which is enclosed into double
+    #    quotes (tail -n1 | cut -d '"' -f2)
+    latest_distribution_url=$(curl --silent ${url} | grep 'tar.gz' | grep -vE '(md5|sha1)' | tail -n1 | cut -d'"' -f2)
+    wget -o /tmp/wget.log -q ${latest_distribution_url} &
     WAIT_PID=$!
 }
 
