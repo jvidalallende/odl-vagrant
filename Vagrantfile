@@ -1,6 +1,9 @@
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
 
+# This Vagrantfile only works with virtualbox
+ENV['VAGRANT_DEFAULT_PROVIDER'] = 'virtualbox'
+
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Base box is Ubuntu 16.04 Xenial Xerus
@@ -10,6 +13,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provider :virtualbox do |vb|
     vb.name = "ODL-Vagrant"
     vb.customize ["modifyvm", :id, "--memory", "4096"]
+
+    # Expose ports to connect to ODL Northbound Interfaces
+    config.vm.network "forwarded_port", guest: 8181, host: 8181
+    config.vm.network "forwarded_port", guest: 8080, host: 8181
 
     # This is needed to resize the disk (by default just 10G) to 50G
     # Note that this may not be the correct file name, it is tied to current
