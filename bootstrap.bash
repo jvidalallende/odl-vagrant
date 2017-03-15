@@ -36,6 +36,7 @@ function wait_for_odl_distribution {
     fi
 }
 
+# libxml2-utils contains xmllint, which helps in XML validation
 function install_packages {
     sudo apt-get update -y
     sudo apt-get install -y \
@@ -44,12 +45,14 @@ function install_packages {
         maven\
         tmux\
         git-review \
-        openvswitch-switch
+        openvswitch-switch \
+        libxml2-utils
 }
 
 function configure_java_env {
     echo "export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64" >> ~/.bash_profile
     echo "export MAVEN_OPTS='-Xmx2048m'" >> ~/.bash_profile
+    echo "export XMLLINT_INDENT='    '" >> ~/.bash_profile
 }
 
 function retrieve_odl_maven_settings {
